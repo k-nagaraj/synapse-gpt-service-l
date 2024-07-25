@@ -1,7 +1,9 @@
 package com.smartdocs.gpt.document.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -28,6 +30,7 @@ public class TrainDocumentRequest {
 	private String fileName;
 	private String resourceId;
 	private List<String> resourceIds=new ArrayList<>();
+	private Map<String,String> docIdFileNameMap=new HashMap<>();
 	
 
 }

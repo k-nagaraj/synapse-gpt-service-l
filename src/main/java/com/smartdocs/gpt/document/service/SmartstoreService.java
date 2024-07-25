@@ -17,7 +17,7 @@ public class SmartstoreService {
 	
 	public SmartStoreConfigurator getSmartStoreDetails() {
 	    Optional<SmartStoreConfigurator> findById = smartStoreConfiguratorRepository.findById(SmartStoreConfigurator.SMARTSTORE_ID);
-	       return findById.orElse(null);
+	       return findById.orElse(new SmartStoreConfigurator());
 	   }
 
 }

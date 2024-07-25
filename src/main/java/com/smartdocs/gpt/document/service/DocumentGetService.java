@@ -25,8 +25,11 @@ public class DocumentGetService {
 
 	@Autowired
 	private SmartstoreService smartStoreConfiguratorService;
+	
+	
 
 	public String buildURL(String documentId, String method, String fileName) {
+		
 		SmartStoreConfigurator smartStoreConfigurator = smartStoreConfiguratorService.getSmartStoreDetails();
 
 		String expiration = null;

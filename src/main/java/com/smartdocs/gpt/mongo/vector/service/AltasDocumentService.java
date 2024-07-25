@@ -473,11 +473,16 @@ public class AltasDocumentService {
         return jsonResponse;
 	}
 	
-	public void trainBotDocuments(TrainDocumentRequest trainDocumentRequest) {
-		for(var docId:trainDocumentRequest.getResourceIds()) {
-			trainDocumentRequest.setResourceId(docId);
-			trainBot(trainDocumentRequest);
+	public boolean trainBotDocuments(TrainDocumentRequest trainDocumentRequest) {
+		log.info("train bot documents");
+		boolean success = false;
+		for(var entry:trainDocumentRequest.getDocIdFileNameMap().entrySet()) {
+			trainDocumentRequest.setDocumentId(entry.getKey());
+			trainDocumentRequest.setFileName(entry.getValue());
+			trainDocumentRequest.setSiteId(trainDocumentRequest.getSiteId());
+			success=trainBot(trainDocumentRequest);
 		}
+		return success;
 	}
 	
 	public boolean trainBot(TrainDocumentRequest trainDocumentRequest) {
