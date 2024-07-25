@@ -14,9 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.smartdocs.gpt.document.model.SmartStoreConfigurator;
-import com.smartdocs.gpt.document.util.RSAUtil;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,51 +24,33 @@ public class DocumentGetService {
 	private SmartstoreService smartStoreConfiguratorService;
 	
 	
-
-	public String buildURL(String documentId, String method, String fileName) {
-		
-		SmartStoreConfigurator smartStoreConfigurator = smartStoreConfiguratorService.getSmartStoreDetails();
-
-		String expiration = null;
-		String secKey = null;
+	public String buildURL( String documentId, String method,String fileName) {
 		String url = "";
-		String fileextension = "";
+		String expiration = "";
 		try {
 			expiration = convertLocalTimeToUTCPlus(10);
-			if (fileName != null) {
-				fileextension = getFileExtension(fileName);
-			}
-			String appendedText = null;
-			url = smartStoreConfigurator.getServerURL();
-			url = url + "" + smartStoreConfigurator.getSystem()
-					+ (StringUtils.isNotEmpty(fileName) ? ("/" + fileName) : "") + "?" + method;
-
-			url = url + "&pVersion=" + smartStoreConfigurator.getPVersion();
-			url = url + "&contRep=" + smartStoreConfigurator.getContRep();
-			url = url + "&docId=" + documentId;
-
-			if (method.equals("create")) {
-				url = url + "&compId=" + smartStoreConfigurator.getCompId() + fileextension;
-				url = url + "&docProt=rud";
-				url = url + "&accessMode=c";
-				appendedText = smartStoreConfigurator.getContRep() + documentId + smartStoreConfigurator.getCompId()
-						+ fileextension + "rud" + "c" + smartStoreConfigurator.getAuthId().replace("%3D", "=")
-						+ expiration;
-			} else {
-				url = url + "&accessMode=r";
-				appendedText = smartStoreConfigurator.getContRep() + documentId + "r"
-						+ smartStoreConfigurator.getAuthId().replace("%3D", "=") + expiration;
-			}
-			url = url + "&authId=" + smartStoreConfigurator.getAuthId();
-			url = url + "&expiration=" + expiration;
-			url = url + "&ssp=true";
-
-			String publicKey = smartStoreConfigurator.getSecKey();
-			secKey = RSAUtil.encryptMessage(appendedText, publicKey);
-			url = url + "&secKey=" + secKey;
 		} catch (Exception e) {
 			log.error("Exception : " + e);
 		}
+		var smartStoreConfigurator =smartStoreConfiguratorService.getSmartStoreDetails();
+		url = smartStoreConfigurator.getServerURL();
+		url = url + "" + smartStoreConfigurator.getSystem()+(StringUtils.isNotEmpty(fileName)?("/"+fileName):"") + "?" + method;
+
+		url = url + "&pVersion=" + smartStoreConfigurator.getPVersion();
+		url = url + "&contRep=" + smartStoreConfigurator.getContRep();
+		url = url + "&docId=" + documentId;
+		url = url + "&compId=" + smartStoreConfigurator.getCompId();
+		url = url + "&docProt=rud";
+		if (method.equals("create")) {
+			url = url + "&accessMode=c";
+		} else {
+			url = url + "&accessMode=r";
+		}
+
+		url = url + "&authId=" + smartStoreConfigurator.getAuthId();
+		url = url + "&expiration=" + expiration;
+		url = url + "&sp=true";
+		url = url + "&secKey=" + smartStoreConfigurator.getSecKey();
 		return url;
 	}
 

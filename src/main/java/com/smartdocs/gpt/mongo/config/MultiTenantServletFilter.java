@@ -34,7 +34,7 @@ public class MultiTenantServletFilter extends GenericFilterBean {
 			return httpRequest.getHeader(TenantContext.TENANT_HEADER);
 		}
 
-		return "cnty-dev";
+		return defaultTenant;
 	}
 
 }

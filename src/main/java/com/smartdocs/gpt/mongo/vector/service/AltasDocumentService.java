@@ -477,7 +477,7 @@ public class AltasDocumentService {
 		log.info("train bot documents");
 		boolean success = false;
 		for(var entry:trainDocumentRequest.getDocIdFileNameMap().entrySet()) {
-			trainDocumentRequest.setDocumentId(entry.getKey());
+			trainDocumentRequest.setResourceId(entry.getKey());
 			trainDocumentRequest.setFileName(entry.getValue());
 			trainDocumentRequest.setSiteId(trainDocumentRequest.getSiteId());
 			success=trainBot(trainDocumentRequest);

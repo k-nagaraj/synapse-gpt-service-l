@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.extractor.ExtractorFactory;
 import org.apache.poi.extractor.POITextExtractor;
 
@@ -63,7 +64,7 @@ public class DocumentParser {
 			int numberOfPages = pdfReader.getNumberOfPages();
 			for (int page = 1; page <= numberOfPages; page++) {
 				String pageText = PdfTextExtractor.getTextFromPage(pdfReader, page);
-				if (pageText != null && !pageText.isEmpty()) {
+				if (StringUtils.isNotBlank(pageText)) {
 					content.put(page, Document.from(preprocessText(pageText)));
 				}
 			}
