@@ -48,10 +48,22 @@ public class AtlasVectorController {
 
 	}
 	
+	@DeleteMapping("/deleteBot/{botId}")
+	public void deleteBot(@PathVariable(value = "botId")String siteId ) {
+		altasDocumentService.deleteBot(siteId);
+	}
+	
 	@PostMapping("/trainUrl/{siteId}")
 	public ResponseEntity<Boolean> trainOnUrl(@RequestBody List<String> urls, @PathVariable(value="siteId") String siteId) {
 		altasDocumentService.trainOnUrl(urls,siteId);
 		return ResponseEntity.ok(true);
+	}
+	
+	
+	@PostMapping("/train/bot")
+	public void trainBot(@RequestBody TrainDocumentRequest trainDocumentRequest) {
+		 altasDocumentService.trainBotDocuments(trainDocumentRequest);
+
 	}
 
 }

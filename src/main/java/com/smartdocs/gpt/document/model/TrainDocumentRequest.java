@@ -1,5 +1,8 @@
 package com.smartdocs.gpt.document.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -24,6 +27,7 @@ public class TrainDocumentRequest {
 	private String htmlLink;
 	private String fileName;
 	private String resourceId;
+	private List<String> resourceIds=new ArrayList<>();
 	
 
 }

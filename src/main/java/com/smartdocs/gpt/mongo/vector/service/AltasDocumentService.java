@@ -407,6 +407,13 @@ public class AltasDocumentService {
 		
 
 	}
+	
+	public void deleteBot(String botId) {
+	
+			vectorDocumentsRepository.deleteBySiteId(botId);
+			
+		
+	}
 
 	public TranslationResponse translate(String text,String langCode) throws IOException, InterruptedException {
 		text = text.replace("\n", "");
@@ -465,6 +472,74 @@ public class AltasDocumentService {
         String jsonResponse= chatResponse.getChoices().get(0).getMessage().getContent();
         return jsonResponse;
 	}
+	
+	public void trainBotDocuments(TrainDocumentRequest trainDocumentRequest) {
+		for(var docId:trainDocumentRequest.getResourceIds()) {
+			trainDocumentRequest.setResourceId(docId);
+			trainBot(trainDocumentRequest);
+		}
+	}
+	
+	public boolean trainBot(TrainDocumentRequest trainDocumentRequest) {
+		
+		
+		TrainingStatus trainingStatus = new TrainingStatus();
+		trainingStatus.setDocumentId(trainDocumentRequest.getDocumentId());
+		trainingStatus.setStatus("In-Progress");
+		trainingStatus = trainingStatusRepository.save(trainingStatus);
+
+		try {
+			Map<Integer, com.smartdocs.gpt.document.model.Document> documents = documentService
+					.processDocument(trainDocumentRequest);
+			
+			Map<String, String> chunckMap = new HashMap<>();
+
+			for (Map.Entry<Integer, com.smartdocs.gpt.document.model.Document> itr : documents.entrySet()) {
+
+				int page = itr.getKey();
+				com.smartdocs.gpt.document.model.Document document = itr.getValue();
+
+				List<TextSegment> segments = documentService.split(document);
+
+				for (TextSegment textSegment : segments) {
+
+					List<Double> embedding = openAIService.createEmbeddingInDouble(textSegment.text());
+					var vectorDocument = new VectorDocuments();
+					vectorDocument.setDocumentContent(textSegment.text());
+					vectorDocument.setEmbeddings(embedding);
+					vectorDocument.setPage(page);
+					vectorDocument.setSiteId(trainDocumentRequest.getSiteId());
+					vectorDocument.setDocumentId(trainDocumentRequest.getDocumentId());
+					vectorDocument = vectorDocumentsRepository.save(vectorDocument);
+					chunckMap.put(vectorDocument.getId(), textSegment.text());
+				}
+
+			}
+			List<FileDetails> fileDetailList = new ArrayList<>();
+
+			for (Map.Entry<String, String> itr : chunckMap.entrySet()) {
+				FileDetails fileDetails = new FileDetails(trainDocumentRequest.getSiteId(),
+						trainDocumentRequest.getDocumentCategory(), trainDocumentRequest.getDocumentId(), "",
+						itr.getValue(), itr.getKey());
+				fileDetailList.add(fileDetails);
+			}
+
+			fileDetailsRepository.saveAll(fileDetailList);
+			trainingStatus.setStatus("Completed");
+
+		} catch (Exception e) {
+
+			trainingStatus.setErrorMessage(e.getMessage());
+			log.info("Some Error occurred while training");
+			trainingStatus.setStatus("Some error occurred");
+			e.printStackTrace();
+		}
+
+		trainingStatusRepository.save(trainingStatus);
+		
+		return true;
+	}
+
 
 	
 
