@@ -182,7 +182,7 @@ public class AltasDocumentService {
 		    
 		    
 		    
-	       MongoDatabase database = mongoClient.getDatabase("demo2_s1");
+	       MongoDatabase database = mongoClient.getDatabase("synapse-dev-lite");
 		    MongoCollection<Document> collection = database.getCollection("VectorDocuments");
 		    int numCandidates = 100;
 		    int limit = 3;
