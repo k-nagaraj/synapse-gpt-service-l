@@ -1,5 +1,5 @@
 
-server.error.whitelabel.enabled: false
+
 
 
 
@@ -9,7 +9,7 @@ spring:
     data:
       mongodb:
          uri: mongodb://sdocs_dmanin:Al1cI_Av2adU-V2b1@saas-dev-shard-00-00.jau0z.mongodb.net:27017,saas-dev-shard-00-01.jau0z.mongodb.net:27017,saas-dev-shard-00-02.jau0z.mongodb.net:27017/?ssl=true&replicaSet=atlas-g7qpsn-shard-0&authSource=admin
-         database: cnty
+         database: synapse-dev-lite
 
     mvc.view:
       prefix: /WEB-INF/views/
