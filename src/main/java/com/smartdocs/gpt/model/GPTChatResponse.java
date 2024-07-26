@@ -14,10 +14,7 @@ public class GPTChatResponse {
 	
 
 	
-	private String language;
-	private String en_response;
-	private String en_query;
-	private boolean createTicket;
+
 
 
 }

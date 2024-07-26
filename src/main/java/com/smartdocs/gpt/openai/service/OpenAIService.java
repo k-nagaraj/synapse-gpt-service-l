@@ -40,9 +40,9 @@ public class OpenAIService {
 	}
 
 	public ChatResponse createChatCompletion(List<Message> messages, int maxTokens, double temperature) {
-		ResponseFormat responseformat = new ResponseFormat();
-		responseformat.setType("json_object");
-		ChatRequest request = new ChatRequest(openAiConfigProperties.getModelName(), messages, maxTokens, temperature,responseformat);
+//		ResponseFormat responseformat = new ResponseFormat();
+//		responseformat.setType("json_object");
+		ChatRequest request = new ChatRequest(openAiConfigProperties.getModelName(), messages, maxTokens, temperature);
 		log.info(request.toString());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

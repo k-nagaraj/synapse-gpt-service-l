@@ -189,7 +189,7 @@ public class AltasDocumentService {
 		    
 		    Document filter=null;
 		    // Constructing the filter for vectorSearch
-		    if(chatRequest.getFileIds().size()>0) {
+		    if(chatRequest.getFileIds()!=null && chatRequest.getFileIds().size()>0) {
 		     filter = new Document("$and", Arrays.asList(
 		            new Document("siteId", new Document("$in", Collections.singletonList(chatRequest.getSiteId()))),
 		            new Document("documentId", new Document("$in", Collections.singletonList(chatRequest.getFileIds().get(0))))

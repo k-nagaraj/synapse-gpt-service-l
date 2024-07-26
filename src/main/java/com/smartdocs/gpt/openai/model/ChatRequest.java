@@ -14,7 +14,7 @@ public class ChatRequest {
 	private List<Message> messages;
 	private int max_tokens;
 	private double temperature;
-	private ResponseFormat response_format;
+//	private ResponseFormat response_format;
 
 	public ChatRequest(String model, String prompt) {
 		this.model = model;
@@ -23,18 +23,18 @@ public class ChatRequest {
 		this.messages.add(new Message("user", prompt));
 	}
 
-	public ChatRequest(String model, List<Message> messages, int max_tokens, double temperature,ResponseFormat responseformat) {
+	public ChatRequest(String model, List<Message> messages, int max_tokens, double temperature) {
 		this.model = model;
 		this.messages = messages;
 		this.max_tokens = max_tokens;
 		this.temperature = temperature;
-		this.response_format=responseformat;
+//		this.response_format=responseformat;
 	}
 
 	@Override
 	public String toString() {
 		return "ChatRequest [model=" + model + ", messages=" + messages + ", max_tokens=" + max_tokens
-				+ ", temperature=" + temperature + "response_format="+response_format.getType()+ "]";
+				+ ", temperature=" + temperature + "response_format="+ "]";
 	}
 
 	
