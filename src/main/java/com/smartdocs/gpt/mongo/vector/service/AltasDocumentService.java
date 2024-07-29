@@ -108,6 +108,7 @@ public class AltasDocumentService {
 					vectorDocument.setPage(page);
 					vectorDocument.setSiteId(trainDocumentRequest.getSiteId());
 					vectorDocument.setDocumentId(trainDocumentRequest.getDocumentId());
+					vectorDocument.setDocumentName(trainDocumentRequest.getFileName());
 					vectorDocument = vectorDocumentsRepository.save(vectorDocument);
 					chunckMap.put(vectorDocument.getId(), textSegment.text());
 				}
@@ -371,6 +372,7 @@ public class AltasDocumentService {
 					vectorDocument.setPage(page);
 					vectorDocument.setSiteId(trainDocumentRequest.getSiteId());
 					vectorDocument.setDocumentId(trainDocumentRequest.getDocumentId());
+					vectorDocument.setDocumentName(trainDocumentRequest.getFileName());
 					vectorDocument = vectorDocumentsRepository.save(vectorDocument);
 					chunckMap.put(vectorDocument.getId(), textSegment.text());
 				}
