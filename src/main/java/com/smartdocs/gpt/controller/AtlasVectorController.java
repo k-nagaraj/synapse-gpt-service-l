@@ -65,7 +65,7 @@ public class AtlasVectorController {
 	
 	
 	@PostMapping("/train/bot")
-	public boolean trainBot(@RequestBody TrainDocumentRequest trainDocumentRequest) {
+	public String trainBot(@RequestBody TrainDocumentRequest trainDocumentRequest) {
 		return altasDocumentService.trainBotDocuments(trainDocumentRequest);
 
 	}

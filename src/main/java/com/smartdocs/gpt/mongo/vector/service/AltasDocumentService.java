@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.AggregateIterable;
@@ -333,20 +332,22 @@ public class AltasDocumentService {
 		return jsonResponse;
 	}
 
-	public boolean trainBotDocuments(TrainDocumentRequest trainDocumentRequest) {
+	public String trainBotDocuments(TrainDocumentRequest trainDocumentRequest) {
 		log.info("train bot documents");
-		boolean success = false;
+		StringBuilder responseBuilder = new StringBuilder();
 		for (var entry : trainDocumentRequest.getDocIdFileNameMap().entrySet()) {
 			trainDocumentRequest.setResourceId(entry.getKey());
 			trainDocumentRequest.setFileName(entry.getValue());
 			trainDocumentRequest.setSiteId(trainDocumentRequest.getSiteId());
-			success = trainBot(trainDocumentRequest);
+			String success = trainBot(trainDocumentRequest);
+			responseBuilder.append(success).append("\n");
 		}
-		return success;
+		return responseBuilder.toString();
 	}
 
-	public boolean trainBot(TrainDocumentRequest trainDocumentRequest) {
 
+	public String trainBot(TrainDocumentRequest trainDocumentRequest) {
+		String response = "";
 		TrainingStatus trainingStatus = new TrainingStatus();
 		trainingStatus.setDocumentId(trainDocumentRequest.getDocumentId());
 		trainingStatus.setStatus("In-Progress");
@@ -391,9 +392,10 @@ public class AltasDocumentService {
 
 			fileDetailsRepository.saveAll(fileDetailList);
 			trainingStatus.setStatus("Completed");
+			response = "Training Completed for file : "+trainDocumentRequest.getFileName();
 
 		} catch (Exception e) {
-
+			response = "Some error occurred in file : "+trainDocumentRequest.getFileName();
 			trainingStatus.setErrorMessage(e.getMessage());
 			log.info("Some Error occurred while training");
 			trainingStatus.setStatus("Some error occurred");
@@ -401,11 +403,12 @@ public class AltasDocumentService {
 		}
 
 		trainingStatusRepository.save(trainingStatus);
+		return response;
 
-		return true;
+
 	}
 
-	public PhraseResponse generateUtterance(GenerateUtteranceDto generateUtteranceDto) throws JsonMappingException, JsonProcessingException {
+	public PhraseResponse generateUtterance(GenerateUtteranceDto generateUtteranceDto) throws  JsonProcessingException {
 		List<Message> messages = new ArrayList<>();
 		messages.add(new Message("system", "Act as paraphrase bot"));
 		messages.add(new Message("system", "a phrase/question/sentence or there list  will be given to you by user"));
@@ -421,8 +424,7 @@ public class AltasDocumentService {
 		String jsonResponse = chatResponse.getChoices().get(0).getMessage().getContent();
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		PhraseResponse greetingParaphrases = objectMapper.readValue(jsonResponse, PhraseResponse.class);
-		return greetingParaphrases;
+        return objectMapper.readValue(jsonResponse, PhraseResponse.class);
 
 
 
