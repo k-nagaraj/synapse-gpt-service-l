@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.smartdocs.gpt.model.ResponseFormat;
 import com.smartdocs.gpt.openai.model.ChatRequest;
+import com.smartdocs.gpt.openai.model.ChatRequestJson;
 import com.smartdocs.gpt.openai.model.ChatResponse;
 import com.smartdocs.gpt.openai.model.EmbedingsRequest;
 import com.smartdocs.gpt.openai.model.EmbedingsResponse;
@@ -74,6 +75,19 @@ public class OpenAIService {
 		}
 		return queryEmbeddingsDouble;
 		
+	}
+	
+	public ChatResponse createChatCompletionJson(List<Message> messages, int maxTokens, double temperature) {
+		ResponseFormat responseformat = new ResponseFormat();
+		responseformat.setType("json_object");
+		ChatRequestJson request= new ChatRequestJson(openAiConfigProperties.getModelName(), messages, maxTokens, temperature,responseformat);
+		log.info(request.toString());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<ChatRequestJson> requestEntity = new HttpEntity<>(request,headers);
+		var response=restTemplate.exchange(openAiConfigProperties.getApiUrl() + "/chat/completions", HttpMethod.POST, requestEntity, ChatResponse.class);
+		return response.getBody();
+
 	}
 
 }
