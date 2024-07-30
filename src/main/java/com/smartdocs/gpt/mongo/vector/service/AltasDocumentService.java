@@ -392,10 +392,10 @@ public class AltasDocumentService {
 
 			fileDetailsRepository.saveAll(fileDetailList);
 			trainingStatus.setStatus("Completed");
-			response = "Training Completed for file : "+trainDocumentRequest.getFileName();
+			response = " Training Completed for file : "+trainDocumentRequest.getFileName();
 
 		} catch (Exception e) {
-			response = "Some error occurred in file : "+trainDocumentRequest.getFileName();
+			response = " Some error occurred in file : "+trainDocumentRequest.getFileName();
 			trainingStatus.setErrorMessage(e.getMessage());
 			log.info("Some Error occurred while training");
 			trainingStatus.setStatus("Some error occurred");
