@@ -71,8 +71,8 @@ public class AtlasVectorController {
 	}
 	
 	@PostMapping("/generate/utterances")
-	public PhraseResponse generateUtterance(@RequestBody GenerateUtteranceDto generateUtteranceDto) throws JsonMappingException, JsonProcessingException{
-		return altasDocumentService.generateUtterance(generateUtteranceDto);
+	public PhraseResponse generateUtterance(@RequestBody  List<String> utterance,@RequestParam int numberOfUtterance) throws JsonProcessingException{
+		return altasDocumentService.generateUtterance(utterance, numberOfUtterance);
 	}
 	
 	

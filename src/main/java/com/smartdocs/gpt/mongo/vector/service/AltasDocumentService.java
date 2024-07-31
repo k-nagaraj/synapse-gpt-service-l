@@ -408,7 +408,7 @@ public class AltasDocumentService {
 
 	}
 
-	public PhraseResponse generateUtterance(GenerateUtteranceDto generateUtteranceDto) throws  JsonProcessingException {
+	public PhraseResponse generateUtterance(List<String> utterance,int numberOfUtterance) throws  JsonProcessingException {
 		List<Message> messages = new ArrayList<>();
 		messages.add(new Message("system", "Act as paraphrase bot"));
 		messages.add(new Message("system", "a phrase/question/sentence or there list  will be given to you by user"));
@@ -417,8 +417,8 @@ public class AltasDocumentService {
 		messages.add(new Message("system",
 				"json response should be json array of string with key paraphrases, that is paraphrases"));
 		messages.add(new Message("system",
-				"you have to generate " + generateUtteranceDto.getNumberOfUtterance() + "utterances"));
-		messages.add(new Message("user", generateUtteranceDto.getUtterance().toString()));
+				"you have to generate " + numberOfUtterance + "utterances"));
+		messages.add(new Message("user", utterance.toString()));
 
 		ChatResponse chatResponse = openAIService.createChatCompletionJson(messages, 4000, 0.1);
 		String jsonResponse = chatResponse.getChoices().get(0).getMessage().getContent();
