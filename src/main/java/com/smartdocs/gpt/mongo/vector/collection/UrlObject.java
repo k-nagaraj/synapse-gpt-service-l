@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Document("Url-Object")
+@Document("UrlObject")
 public class UrlObject {
 	@Id
 	private String id;
