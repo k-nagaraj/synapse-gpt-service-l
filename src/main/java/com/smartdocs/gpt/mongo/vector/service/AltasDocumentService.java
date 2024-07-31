@@ -49,7 +49,6 @@ import com.smartdocs.gpt.mongo.vector.collection.VectorDocuments;
 import com.smartdocs.gpt.mongo.vector.repository.UrlObjectRepository;
 import com.smartdocs.gpt.mongo.vector.repository.VectorDocumentsRepository;
 import com.smartdocs.gpt.openai.model.ChatResponse;
-import com.smartdocs.gpt.openai.model.GenerateUtteranceDto;
 import com.smartdocs.gpt.openai.model.Message;
 import com.smartdocs.gpt.openai.model.TranslationResponse;
 import com.smartdocs.gpt.openai.service.OpenAIService;
@@ -428,6 +427,11 @@ public class AltasDocumentService {
 
 
 
+	}
+
+	public void deleteURL(String url) {
+		vectorDocumentsRepository.deleteByDocumentId(url);
+		
 	}
 
 }
