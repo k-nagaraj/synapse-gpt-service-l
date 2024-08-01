@@ -117,7 +117,7 @@ public class WebCrawlService {
 						vectorDocument.setSiteId(botId);
 						vectorDocument.setDocumentId(url);
 						vectorDocument.setDocumentName(url);
-						vectorDocument = vectorDocumentsRepository.save(vectorDocument);
+						vectorDocumentsRepository.save(vectorDocument);
 
 					}
 					trainingStatus.setStatus("Completed");
