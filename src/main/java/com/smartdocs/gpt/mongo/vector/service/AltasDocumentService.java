@@ -49,7 +49,6 @@ import com.smartdocs.gpt.mongo.vector.collection.VectorDocuments;
 import com.smartdocs.gpt.mongo.vector.repository.UrlObjectRepository;
 import com.smartdocs.gpt.mongo.vector.repository.VectorDocumentsRepository;
 import com.smartdocs.gpt.openai.model.ChatResponse;
-import com.smartdocs.gpt.openai.model.GenerateUtteranceDto;
 import com.smartdocs.gpt.openai.model.Message;
 import com.smartdocs.gpt.openai.model.TranslationResponse;
 import com.smartdocs.gpt.openai.service.OpenAIService;
@@ -408,7 +407,7 @@ public class AltasDocumentService {
 
 	}
 
-	public PhraseResponse generateUtterance(GenerateUtteranceDto generateUtteranceDto) throws  JsonProcessingException {
+	public PhraseResponse generateUtterance(List<String> utterance,int numberOfUtterance) throws  JsonProcessingException {
 		List<Message> messages = new ArrayList<>();
 		messages.add(new Message("system", "Act as paraphrase bot"));
 		messages.add(new Message("system", "a phrase/question/sentence or there list  will be given to you by user"));
@@ -417,8 +416,8 @@ public class AltasDocumentService {
 		messages.add(new Message("system",
 				"json response should be json array of string with key paraphrases, that is paraphrases"));
 		messages.add(new Message("system",
-				"you have to generate " + generateUtteranceDto.getNumberOfUtterance() + "utterances"));
-		messages.add(new Message("user", generateUtteranceDto.getUtterance().toString()));
+				"you have to generate " + numberOfUtterance + "utterances"));
+		messages.add(new Message("user", utterance.toString()));
 
 		ChatResponse chatResponse = openAIService.createChatCompletionJson(messages, 4000, 0.1);
 		String jsonResponse = chatResponse.getChoices().get(0).getMessage().getContent();
@@ -428,6 +427,11 @@ public class AltasDocumentService {
 
 
 
+	}
+
+	public void deleteURL(String url) {
+		vectorDocumentsRepository.deleteByDocumentId(url);
+		
 	}
 
 }
