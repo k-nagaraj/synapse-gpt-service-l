@@ -81,6 +81,9 @@ public class AltasDocumentService {
 	@Value("${clm.translator.url}")
 	private String translateUrl;
 
+	@Value("${tenant.default}")
+	private String defaultTenant;
+
 	public boolean train(TrainDocumentRequest trainDocumentRequest) {
 
 		TrainingStatus trainingStatus = new TrainingStatus();
@@ -183,7 +186,7 @@ public class AltasDocumentService {
 		List<Double> queryEmbeddings = openAIService.createEmbeddingInDouble(chatRequest.getMessage());
 		System.out.println(TenantContext.getTenantId());
 
-		MongoDatabase database = mongoClient.getDatabase("synapse-dev-lite");
+		MongoDatabase database = mongoClient.getDatabase(defaultTenant);
 		MongoCollection<Document> collection = database.getCollection("VectorDocuments");
 		int numCandidates = 100;
 		int limit = 3;
